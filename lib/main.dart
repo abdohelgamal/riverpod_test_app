@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_test_app/list_controller.dart';
 import 'package:riverpod_test_app/todo.dart';
 
-final controller = StateNotifierProvider<TodoListController, List<Todo>>(
-    (ref) => TodoListController());
+final controller =
+    StateNotifierProvider<TodoListController, TodosAbstractState>(
+        (ref) => TodoListController());
 
 void main() {
   runApp(const MyApp());
@@ -28,18 +29,18 @@ class ScaffoldBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listController = ref.watch(controller);
+    final dataController = ref.watch(controller.notifier);
     return Column(
       children: [
         MaterialButton(
             color: Colors.green,
             minWidth: MediaQuery.of(context).size.width * 0.5,
             onPressed: () {
-              ref.read(controller.notifier).addTodo();
+              dataController.addTodo();
             },
             child: const Text('add')),
         Text(
-          listController.length.toString(),
+          dataController.todos.length.toString(),
         ),
         MaterialButton(
             color: Colors.red,
